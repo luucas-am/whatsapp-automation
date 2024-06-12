@@ -9,32 +9,32 @@ Sends messages based on a xlsx file that has the Number and Message field
 
 ### Tutorial
 1. Clone the project from the git repository
-'''bash
+```bash
 git clone <repository>
-'''
+```
 
 2. Activate virtual environment
-'''bash
+```bash
 python3 -m venv env
-
+# Activate on Linux or Mac
 source env/bin/activate
-# or
+# Activate on Windows
 env/Scripts/activate
-'''
+```
 
 3. Install projects requirements
-'''bash
+```bash
 pip install -r requirements.txt
-'''
+```
 
 4. Run the server
-'''bash
+```bash
 make run-dev
 # or
 uvicorn src.main:app --reload
 # or
 uvicorn src.main:app
-'''
+```
 
 Access the App on http://127.0.0.1:8000/
 
