@@ -28,6 +28,6 @@ def send_messages():
 
         # busca elemento com id side para verificar se pagina está carregcada
         while len(NAVEGADOR.find_elements(by=By.ID, value="side")) < 1:
-            time.sleep(1)
-        NAVEGADOR.find_element(by=By.XPATH, value='//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div/p/span').send_keys(Keys.ENTER)
+            time.sleep(10)
+        NAVEGADOR.find_element(By.CSS_SELECTOR, "Button[aria-label='Send']").click()
         time.sleep(10)
