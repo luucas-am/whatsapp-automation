@@ -1,7 +1,10 @@
-import time
 import re
+import time
+import pytz
 
 import pandas as pd
+
+from datetime import datetime
 
 from fastapi import APIRouter
 from urllib import parse
@@ -17,12 +20,27 @@ messages_router = APIRouter(
 
 @messages_router.post("/send", status_code=200, responses={200: {"description": "Mensagens enviadas com sucesso!"}})
 def send_messages():
+    current_time = datetime.now(pytz.timezone('America/Sao_Paulo')).strftime("%H:%M")
     contatos_df = pd.read_excel("contatos.xlsx")
 
     for i, mensagem in enumerate(contatos_df["Mensagem"]):
+        if current_time not in contatos_df.loc[i, "Horário"].split(","):
+            continue
+
         numero = contatos_df.loc[i, "Número"]
+
+        nome = None
+        try:
+            nome = contatos_df.loc[i, "Nome"]
+        except:
+            pass
+
         numero_formatado = re.sub(r"[\D]", "", numero)
-        texto = parse.quote(mensagem)
+        if nome:
+            texto = parse.quote(f"{nome}, {mensagem}")
+        else:
+            texto = parse.quote(mensagem)
+
         link = f"https://web.whatsapp.com/send?phone={numero_formatado}&text={texto}"
         NAVEGADOR.get(link)
 
