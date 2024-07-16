@@ -28,24 +28,19 @@ def send_messages():
             continue
 
         numero = contatos_df.loc[i, "Número"]
+        numero_formatado = re.sub(r"[\D]", "", str(numero))
 
-        nome = None
-        try:
-            nome = contatos_df.loc[i, "Nome"]
-        except:
-            pass
-
-        numero_formatado = re.sub(r"[\D]", "", numero)
+        nome = contatos_df.loc[i, "Nome"]
         if nome:
             texto = parse.quote(f"{nome}, {mensagem}")
-        else:
+        elif nome == "nan":
             texto = parse.quote(mensagem)
 
-        link = f"https://web.whatsapp.com/send?phone={numero_formatado}&text={texto}"
+        link = f"https://web.whatsapp.com/send?phone=55{numero_formatado}&text={texto}"
         NAVEGADOR.get(link)
 
         # busca elemento com id side para verificar se pagina está carregcada
         while len(NAVEGADOR.find_elements(by=By.ID, value="side")) < 1:
             time.sleep(10)
-        NAVEGADOR.find_element(By.CSS_SELECTOR, "Button[aria-label='Send']").click()
+        NAVEGADOR.find_element(By.CSS_SELECTOR, "Button[aria-label='Enviar']").click()
         time.sleep(10)
