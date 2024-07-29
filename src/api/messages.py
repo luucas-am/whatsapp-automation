@@ -20,7 +20,13 @@ messages_router = APIRouter(
 
 @messages_router.post("/send", status_code=200, responses={200: {"description": "Mensagens enviadas com sucesso!"}})
 def send_messages():
-    current_time = datetime.now(pytz.timezone('America/Sao_Paulo')).strftime("%H:%M")
+    current_datetime = datetime.now(pytz.timezone('America/Sao_Paulo'))
+    current_time = current_datetime.strftime("%H:%M")
+    current_weekday = current_datetime.weekday()
+
+    if current_weekday == 5 or current_weekday == 6:
+        return {"message": "Fim de semana, não é necessário enviar mensagens!"}
+
     contatos_df = pd.read_excel("contatos.xlsx")
 
     for i, mensagem in enumerate(contatos_df["Mensagem"]):
